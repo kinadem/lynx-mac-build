@@ -27,6 +27,20 @@ and uploads the DMG, SHA-256 checksum, metadata report, and app self-test report
 as the **LYNX-Intel-High-Sierra-CANDIDATE** artifact. Artifacts are retained for 7 days.
 Standard GitHub-hosted build minutes are free for public repositories.
 
+## Successful High Sierra-targeted build
+
+[Build 40915498843](https://github.com/kinadem/lynx-mac-build/actions/runs/40915498843)
+passed from recipe commit `a118e0fe77c75693fe7a095d0599686d40db159b`.
+The app compiled with a 10.13 deployment target and unguarded newer-API warnings
+as errors. Native app self-test, Intel/10.13 metadata checks, ad-hoc signature
+verification and DMG verification passed on the modern Intel build host.
+Downloaded artifact and DMG checksums matched. The DMG is **14,333,538 bytes**.
+
+[High Sierra build reports and checksum](reports/2026-10-29-high-sierra/) record
+the results. The filesystem backport also passed all **1,289,425 upstream core
+checks** on Linux. Actual High Sierra launch, physical audio/MIDI and plugins
+still require testing on the target machine; the build is a candidate.
+
 ## Earlier Catalina build (requires macOS 10.15+)
 
 [Build 40909987245](https://github.com/kinadem/lynx-mac-build/actions/runs/40909987245)

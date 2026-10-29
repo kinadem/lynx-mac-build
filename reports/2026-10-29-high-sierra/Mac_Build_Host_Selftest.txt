@@ -1,0 +1,15 @@
+connections=6
+peak=0.709567
+project=OK
+project_features=OK
+hardware_outputs=OK
+plugin_substitutes=OK
+patcher=OK
+native_engines=OK (11 made)
+undo=OK
+recording=OK
+midi=OK
+package=OK
+wavpack=NO_FL
+effects=OK
+result=OK

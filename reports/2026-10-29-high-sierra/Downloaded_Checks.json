@@ -1,0 +1,9 @@
+{
+  "dmg": "LYNX-0.1.19-alpha-high-sierra-intel-CANDIDATE.dmg",
+  "size_bytes": 14333538,
+  "sha256": "1b65d984151fc5790823d4bcf02871eaba6f35a3eeaf29aafbfa71548ef96cdb",
+  "minimum_macos": "10.13.0",
+  "architecture": "x86_64",
+  "selftest": "OK",
+  "runtime_tested_on_high_sierra": false
+}

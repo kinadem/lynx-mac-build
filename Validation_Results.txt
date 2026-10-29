@@ -1,14 +1,21 @@
-LYNX Intel/Catalina compatibility preparation — validation results
-Date: 29 October 2026
-Source: 18f0c18a46c3e2eec3f85268819810d5ecfb4e58
-Host: Linux x86_64; compiler: GCC 13.3.0
+LYNX High Sierra compatibility port — validation results
+Target: macOS 10.13.6, Intel Core 2 Duo / 4 GB RAM.
+Source: LYNX v0.1.19-alpha, 18f0c18a46c3e2eec3f85268819810d5ecfb4e58.
+Filesystem backport: ghc::filesystem v1.5.14, pinned commit and SHA-256 verified.
 
-Audio/core library: built with -O2, generic x86-64, AVX/AVX2/FMA disabled globally and optional Harmor/Harmless AVX kernels disabled.
-Upstream core checks: 1,289,425 checks, 0 failures.
-Test harness: compiled in strict -std=c++20, -O0 after the upstream CMake GNU-extension mode exposed a unix macro conflict. No test assertions removed.
-Compatibility kit: 5 test methods passed (Mach-O fixtures and patch behavior).
-Shell script syntax: passed for build_intel_catalina.sh and Check_My_Mac.command.
+Linux validation after replacing all four filesystem users:
+- Rebuilt lynx_core successfully with the backported file operations.
+- Recompiled and ran the complete upstream core suite: 1,289,425 checks, 0 failures.
+- Six metadata/patch test methods passed, including rejecting 10.14/10.15 binaries for the 10.13 target.
+- Applied the source backport twice to the pinned source successfully (idempotency check).
+- Build/check shell scripts passed syntax checks; workflow YAML and standard Intel runner verified.
 
-NOT COMPLETED: Apple application build; real Mach-O inspection; Core Audio, physical MIDI, or Nexus tests; a run on macOS Catalina.
-Target assumption: Intel Mac, macOS 10.15 or newer. Exact target model and OS remain unconfirmed.
-No Mac app or DMG was built in this session.
+Native Mac build 40915498843: PASSED.
+- Xcode 16.4, modern Intel build host, deployment target 10.13.
+- App self-test result=OK; 11 native engines created by the self-test.
+- Mach-O x86_64 and minimum macOS 10.13.0; matching Info.plist metadata.
+- Ad-hoc signature verified; not notarized.
+- hdiutil verified the DMG; downloaded archive and DMG checksums matched.
+- DMG: 14,333,538 bytes; SHA-256 1b65d984151fc5790823d4bcf02871eaba6f35a3eeaf29aafbfa71548ef96cdb.
+See reports/2026-10-29-high-sierra/ for the actual reports.
+A real High Sierra launch, sound, typing keyboard, physical MIDI, save/reopen, WAV export and actual installed plugins still need tests on the target Mac.
