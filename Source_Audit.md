@@ -1,6 +1,6 @@
 # LYNX source analysis for an older Intel Mac
 
-Prepared on 29 October 2026. Scope: source inspection and a compatibility build kit; no Mac binary or physical-device validation was completed.
+Preparation audit, 29 October 2026. Scope: source inspection and a compatibility build kit, completed before the hosted Mac build. For later build results, consult the actual GitHub Actions run and its reports. No physical-device validation is claimed by this audit.
 
 ## Decision
 

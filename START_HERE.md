@@ -2,7 +2,7 @@
 
 Prepared on 29 October 2026.
 
-**Current status: source changes and a reproducible build recipe. A Mac application installer has not been built or tested in this session.** The working target is an Intel Mac running macOS Catalina 10.15 or newer. Your exact model, processor, memory, and macOS version remain unconfirmed.
+**Use an installer only from a successful GitHub Actions run, together with that run's metadata and self-test reports.** This repository contains the source changes and reproducible build recipe. A successful build is a compatibility candidate, not proof of Catalina runtime compatibility. The working target is an Intel Mac running macOS Catalina 10.15 or newer. The exact target model, processor, memory, and macOS version remain unconfirmed.
 
 LYNX is already open source. This work uses its available C++ source to prepare an older-Mac port; decompiling its executable is unnecessary.
 
@@ -33,7 +33,7 @@ bash ./build_intel_catalina.sh
 
 The script downloads the exact audited LYNX release into `work/LYNX`, applies the patch, builds and checks `LYNX.app`, runs its native self-test on the build Mac, then creates a candidate DMG and SHA-256 checksum in `work/output`. It does not install the app or overwrite an existing installed LYNX. Existing candidate DMGs receive distinct filenames on repeat builds.
 
-**GitHub Mac build:** place this kit's contents at the root of a GitHub repository, including `.github/workflows/catalina-build.yml`. Open Actions → Build LYNX Intel Catalina candidate → Run workflow. Download the resulting candidate artifact after a successful run. This workflow has been prepared but has not been run here. It uploads a build artifact and does not publish a release. GitHub documents standard hosted runners as free for public repositories; private repositories have their own usage limits and billing rules. See https://docs.github.com/en/actions/reference/runners/github-hosted-runners.
+**GitHub Mac build:** changes to the build files on `main` start the workflow automatically. A build can also be started from Actions → Build LYNX Intel Catalina candidate → Run workflow. Download the candidate artifact after a successful run and extract its DMG. The workflow uploads a build artifact and does not publish a release. Check the actual run for its status; the earlier source-audit results describe preparation before a hosted Mac build. GitHub documents standard hosted runners as free for public repositories; private repositories have their own usage limits and billing rules. See https://docs.github.com/en/actions/reference/runners/github-hosted-runners.
 
 Keep the source notices and license. The build script pins LYNX 0.1.19-alpha to commit `18f0c18a46c3e2eec3f85268819810d5ecfb4e58`; it does not silently follow later releases.
 
