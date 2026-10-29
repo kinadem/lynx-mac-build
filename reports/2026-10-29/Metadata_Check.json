@@ -1,0 +1,41 @@
+{
+  "bundle": "LYNX.app",
+  "files": {
+    "Contents/MacOS/LYNX": {
+      "architecture": "x86_64",
+      "minimum_macos": "10.15.0",
+      "libraries": [
+        "/System/Library/Frameworks/WebKit.framework/Versions/A/WebKit",
+        "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+        "/System/Library/Frameworks/MetalKit.framework/Versions/A/MetalKit",
+        "/System/Library/Frameworks/CoreAudioKit.framework/Versions/A/CoreAudioKit",
+        "/System/Library/Frameworks/DiscRecording.framework/Versions/A/DiscRecording",
+        "/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio",
+        "/System/Library/Frameworks/CoreMIDI.framework/Versions/A/CoreMIDI",
+        "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+        "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+        "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+        "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+        "/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate",
+        "/usr/lib/libc++.1.dylib",
+        "/usr/lib/libSystem.B.dylib",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+        "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+        "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+        "/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage",
+        "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+        "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+        "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo",
+        "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+        "/usr/lib/libobjc.A.dylib"
+      ],
+      "sha256": "8fa251930ccd755edcebf7550d6ec1facad3e11355f6a76e30296b2e9a67c172"
+    }
+  },
+  "status": "candidate_metadata_passed",
+  "runtime_tested_on_catalina": false,
+  "limit": "Architecture and version metadata only; old-system symbols, audio, MIDI, and plugins still need a Catalina test."
+}

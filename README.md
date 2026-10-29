@@ -16,6 +16,18 @@ and uploads the DMG, SHA-256 checksum, metadata report, and app self-test report
 as the **LYNX-Intel-Catalina-CANDIDATE** artifact. Artifacts are retained for 7 days.
 Standard GitHub-hosted build minutes are free for public repositories.
 
+## First successful Mac build
+
+[Build 40909987245](https://github.com/kinadem/lynx-mac-build/actions/runs/40909987245)
+passed on 29 October 2026, from build-recipe commit
+`4dd0ec7fb327972da32e41e69ddb22c7d3dcf725`. The host ran macOS 15.7.9
+with Xcode 16.4. Compilation, the app self-test (`result=OK`), ad-hoc signature
+verification, Intel/10.15 metadata checks, and `hdiutil verify` passed.
+
+The candidate DMG is **14,321,724 bytes**. Downloaded artifact and DMG checksums
+matched the build outputs. [Reports and DMG checksum](reports/2026-10-29/)
+record these results. The image is ad-hoc signed and is not notarized.
+
 ## Compatibility status
 
 A successful workflow verifies the app on the modern Intel build host.
