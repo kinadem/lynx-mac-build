@@ -10,7 +10,7 @@ import apply_compatibility as patch
 import verify_mac_bundle as check
 
 
-def binary(minimum=0x000A0F00, cpu=check.X86_64, subtype=3, library=None):
+def binary(minimum=0x000A0D00, cpu=check.X86_64, subtype=3, library=None):
     commands = struct.pack('<IIIIII',0x32,24,1,minimum,0x000F0000,0)
     count = 1
     if library:
@@ -24,11 +24,11 @@ def binary(minimum=0x000A0F00, cpu=check.X86_64, subtype=3, library=None):
 class CompatibilityKitTests(unittest.TestCase):
     def test_accepts_requested_intel_target(self):
         result = check.macho(binary(library='/usr/lib/libc++.1.dylib'))
-        self.assertEqual(result['minimum_macos'],'10.15.0')
+        self.assertEqual(result['minimum_macos'],'10.13.0')
         self.assertEqual(result['architecture'],'x86_64')
 
     def test_rejects_wrong_cpu_or_newer_os(self):
-        for data in (binary(0x000B0000),binary(cpu=0x0100000C),binary(subtype=8)):
+        for data in (binary(0x000A0E00),binary(0x000A0F00),binary(0x000B0000),binary(cpu=0x0100000C),binary(subtype=8)):
             with self.subTest(data=data), self.assertRaises(ValueError):
                 check.macho(data)
 
@@ -42,11 +42,17 @@ class CompatibilityKitTests(unittest.TestCase):
             bundle = Path(tmp)/'LYNX.app'
             (bundle/'Contents/MacOS').mkdir(parents=True)
             info = bundle/'Contents/Info.plist'
-            info.write_bytes(plistlib.dumps({'CFBundleExecutable':'LYNX','LSMinimumSystemVersion':'10.15'}))
+            info.write_bytes(plistlib.dumps({'CFBundleExecutable':'LYNX','LSMinimumSystemVersion':'10.13'}))
             (bundle/'Contents/MacOS/LYNX').write_bytes(binary())
-            self.assertFalse(check.verify(bundle)['runtime_tested_on_catalina'])
+            self.assertFalse(check.verify(bundle)['runtime_tested_on_target'])
             info.write_bytes(plistlib.dumps({'CFBundleExecutable':'LYNX','LSMinimumSystemVersion':'11.0'}))
             with self.assertRaises(ValueError): check.verify(bundle)
+
+    def test_explicit_catalina_profile_keeps_its_own_minimum(self):
+        data = binary(0x000A0F00)
+        self.assertEqual(check.macho(data, (10, 15, 0))['minimum_macos'], '10.15.0')
+        with self.assertRaises(ValueError):
+            check.macho(data, (10, 13, 0))
 
     def test_patch_is_idempotent_and_preserves_default(self):
         with tempfile.TemporaryDirectory() as tmp:

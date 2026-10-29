@@ -15,8 +15,8 @@ REPORT="$TASK_DIR/Mac_Compatibility.txt"
     printf 'Processor: '; sysctl -n machdep.cpu.brand_string 2>/dev/null || true
     printf 'Memory in bytes: '; sysctl -n hw.memsize
     printf 'CPU features: '; sysctl -n machdep.cpu.features 2>/dev/null || true
-    printf '\n%s\n' 'Prepared candidate target: Intel x86_64, macOS 10.15 or newer.'
-    printf '%s\n' 'That target is provisional until this report is reviewed and an actual application build is tested.'
+    printf '\n%s\n' 'Current candidate target: Intel x86_64, macOS 10.13 or newer.'
+    printf '%s\n' 'A successful build still requires a runtime test on the actual target Mac.'
     printf '%s\n' 'Nexus requires its own matching Mac plugin, supported CPU/OS, license and sound library.'
 } > "$REPORT"
 cat "$REPORT"

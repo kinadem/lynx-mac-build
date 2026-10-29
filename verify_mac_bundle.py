@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check Intel architecture and deployment metadata. This does not prove Catalina runtime compatibility."""
+"""Check Intel architecture and deployment metadata; target-system testing remains required."""
 import argparse
 import hashlib
 import json
@@ -7,7 +7,7 @@ import plistlib
 import struct
 from pathlib import Path
 
-MINIMUM = (10, 15, 0)
+MINIMUM = (10, 13, 0)
 MAGIC64 = 0xFEEDFACF
 X86_64 = 0x01000007
 
@@ -16,7 +16,7 @@ def version(value):
     return value >> 16, (value >> 8) & 255, value & 255
 
 
-def macho(data):
+def macho(data, target=MINIMUM):
     if len(data) < 32:
         raise ValueError('Truncated Mach-O header')
     magic, cpu, subtype, _, count, size, _, _ = struct.unpack_from('<IiiIIIII', data)
@@ -58,20 +58,21 @@ def macho(data):
         cursor += length
     if cursor != end or not minimums:
         raise ValueError('Missing or inconsistent deployment load commands')
-    if max(minimums) > MINIMUM:
+    if max(minimums) > target:
         raise ValueError('Binary still requires macOS ' + '.'.join(map(str, max(minimums))))
     return {'architecture':'x86_64', 'minimum_macos':'.'.join(map(str, max(minimums))), 'libraries':libraries}
 
 
-def verify(bundle):
+def verify(bundle, target=MINIMUM):
     info = plistlib.loads((bundle / 'Contents/Info.plist').read_bytes())
     minimum = tuple(int(part) for part in info.get('LSMinimumSystemVersion', '').split('.'))
-    if minimum not in {(10, 15), MINIMUM}:
-        raise ValueError('Info.plist does not declare the requested 10.15 target')
+    if minimum + (0,) * (3 - len(minimum)) != target:
+        raise ValueError('Info.plist does not declare the requested deployment target')
     executable = bundle / 'Contents/MacOS' / info['CFBundleExecutable']
     result = {'bundle':bundle.name, 'files':{}, 'status':'candidate_metadata_passed',
-              'runtime_tested_on_catalina':False,
-              'limit':'Architecture and version metadata only; old-system symbols, audio, MIDI, and plugins still need a Catalina test.'}
+              'runtime_tested_on_target':False,
+              'requested_minimum_macos':'.'.join(map(str, target)),
+              'limit':'Architecture and version metadata only; old-system symbols, audio, MIDI, and plugins still need a test on the target Mac.'}
     for path in bundle.rglob('*'):
         if not path.is_file() or path.is_symlink():
             continue
@@ -80,7 +81,7 @@ def verify(bundle):
         if path != executable and first not in {b'\xcf\xfa\xed\xfe', b'\xfe\xed\xfa\xcf', b'\xce\xfa\xed\xfe', b'\xfe\xed\xfa\xce', b'\xca\xfe\xba\xbe', b'\xbe\xba\xfe\xca', b'\xca\xfe\xba\xbf', b'\xbf\xba\xfe\xca'}:
             continue
         data = path.read_bytes()
-        item = macho(data)
+        item = macho(data, target)
         item['sha256'] = hashlib.sha256(data).hexdigest()
         result['files'][str(path.relative_to(bundle))] = item
     if str(executable.relative_to(bundle)) not in result['files']:
@@ -92,8 +93,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('bundle', type=Path)
     parser.add_argument('--json', type=Path)
+    parser.add_argument('--minimum-macos', default='10.13')
     args = parser.parse_args()
-    result = verify(args.bundle.resolve())
+    target = tuple(int(x) for x in args.minimum_macos.split('.'))
+    if len(target) not in (2, 3):
+        parser.error('--minimum-macos must be a major.minor[.patch] version')
+    target += (0,) * (3 - len(target))
+    result = verify(args.bundle.resolve(), target)
     output = json.dumps(result, indent=2) + '\n'
     if args.json:
         args.json.write_text(output)
