@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2613bb9..312c0e2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -264,7 +264,7 @@ if(LYNX_BUILD_APP)
+         MICROPHONE_PERMISSION_TEXT "LYNX records audio from your microphone or audio interface when you arm a track and press Record."
+         DOCUMENT_EXTENSIONS lynx flp mid
+         HARDENED_RUNTIME_ENABLED FALSE
+-        PLIST_TO_MERGE "<plist><dict><key>LSMinimumSystemVersion</key><string>11.0</string><key>NSHighResolutionCapable</key><true/></dict></plist>")
++        PLIST_TO_MERGE "<plist><dict><key>LSMinimumSystemVersion</key><string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string><key>NSHighResolutionCapable</key><true/></dict></plist>")
+ 
+     target_sources(LYNX PRIVATE
+         src/Main.cpp

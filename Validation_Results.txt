@@ -1,0 +1,14 @@
+LYNX Intel/Catalina compatibility preparation — validation results
+Date: 29 October 2026
+Source: 18f0c18a46c3e2eec3f85268819810d5ecfb4e58
+Host: Linux x86_64; compiler: GCC 13.3.0
+
+Audio/core library: built with -O2, generic x86-64, AVX/AVX2/FMA disabled globally and optional Harmor/Harmless AVX kernels disabled.
+Upstream core checks: 1,289,425 checks, 0 failures.
+Test harness: compiled in strict -std=c++20, -O0 after the upstream CMake GNU-extension mode exposed a unix macro conflict. No test assertions removed.
+Compatibility kit: 5 test methods passed (Mach-O fixtures and patch behavior).
+Shell script syntax: passed for build_intel_catalina.sh and Check_My_Mac.command.
+
+NOT COMPLETED: Apple application build; real Mach-O inspection; Core Audio, physical MIDI, or Nexus tests; a run on macOS Catalina.
+Target assumption: Intel Mac, macOS 10.15 or newer. Exact target model and OS remain unconfirmed.
+No Mac app or DMG was built in this session.

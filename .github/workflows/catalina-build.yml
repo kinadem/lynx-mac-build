@@ -1,0 +1,36 @@
+name: Build LYNX Intel Catalina candidate
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/catalina-build.yml'
+      - 'build_intel_catalina.sh'
+      - 'apply_compatibility.py'
+      - 'verify_mac_bundle.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15-intel
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Confirm tools
+        run: |
+          xcodebuild -version
+          cmake --version
+          python3 --version
+      - name: Build pinned source for Intel and macOS 10.15
+        env:
+          LYNX_BUILD_JOBS: '3'
+        run: bash ./build_intel_catalina.sh
+      - name: Upload candidate and build-host checks
+        uses: actions/upload-artifact@v7
+        with:
+          name: LYNX-Intel-Catalina-CANDIDATE
+          path: work/output/*
+          if-no-files-found: error
+          retention-days: 7
